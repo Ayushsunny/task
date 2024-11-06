@@ -22,6 +22,7 @@ export default function TaskTable({ status }: TaskTableProps) {
 
     const [sortOrder, setSortOrder] = useState<SortingOrder>('DESC');
     const [searchTerm, setSearchTerm] = useState('');
+
     const currentTasks = tasks[status] || [];
 
     const [filters, setFilters] = useState({
@@ -50,14 +51,15 @@ export default function TaskTable({ status }: TaskTableProps) {
     const handleKeyDown = useCallback((e: KeyboardEvent) => {
         if (e.key === 'ArrowUp') {
             e.preventDefault();
-            setFocusedTaskIndex(prev => Math.max(0, prev - 1));
+            setFocusedTaskIndex(Math.max(0, focusedTaskIndex - 1));
         } else if (e.key === 'ArrowDown') {
             e.preventDefault();
-            setFocusedTaskIndex(prev => Math.min(sortedTasks.length - 1, prev + 1));
+            setFocusedTaskIndex(Math.min(sortedTasks.length - 1, focusedTaskIndex + 1));
         } else if (e.key === 'Enter' && focusedTaskIndex >= 0) {
             setCurrentTask(sortedTasks[focusedTaskIndex]);
         }
     }, [sortedTasks, focusedTaskIndex, setCurrentTask, setFocusedTaskIndex]);
+    
 
     useEffect(() => {
         window.addEventListener('keydown', handleKeyDown);
