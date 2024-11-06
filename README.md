@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Task Manager
 
-## Getting Started
+Task Manager is a efficient task management application built with Next.js, designed to streamline workflow and boost productivity - assignment by SuperDM.
 
-First, run the development server:
+## 🚀 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Dynamic Task Management**: Create, update, and delete tasks with ease
+- **Advanced Sorting**: Multi-column sorting for better task organization
+- **Smart Filtering**: Filter tasks by priority, assignee, and due date
+- **Instant Search**: Quickly find tasks with real-time search functionality
+- **Keyboard Navigation**: Efficiently navigate through tasks using keyboard shortcuts
+- **Infinite Scrolling**: Smooth loading of large task lists
+- **Responsive Design**: Optimized for both desktop and mobile devices
+
+## 🛠 Tech Stack
+
+- **Frontend**: Next.js 15.0.2, React 18
+- **State Management**: Zustand 5.0.1
+- **Styling**: Tailwind CSS 3.4.1
+- **Date Handling**: date-fns 4.1.0
+- **UI Components**: @headlessui/react 2.2.0
+- **Type Checking**: TypeScript 5
+
+## 🏗 Project Structure
+
+```
+src/
+├── app/
+│   ├── layout.tsx
+│   ├── page.tsx
+│   └── global.css
+├── components/
+│   ├── KeyBoardShortcuts.tsx
+│   ├── TaskTable.tsx
+│   └── TaskTable.tsx
+├── services/
+│   └── api.ts
+├── store/
+│   └── taskStore.ts
+└── types/
+    └── types.ts
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚦 Getting Started
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Prerequisites
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Node.js (v14 or later)
+- npm or yarn
 
-## Learn More
+### Installation
 
-To learn more about Next.js, take a look at the following resources:
+1. Clone the repository:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```
+   git clone https://github.com/ayushsunny/task.git
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. Navigate to the project directory:
 
-## Deploy on Vercel
+   ```
+   cd task
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. Install dependencies:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```
+   npm install
+   ```
+
+### Running the Application
+
+- For development:
+
+  ```
+  npm run dev
+  ```
+
+- For production:
+
+  ```
+  npm run build
+  npm start
+  ```
+
+Visit `http://localhost:3000` in your browser to use the application.
+
+## 🧪 Running Tests
+
+```
+npm run test
+```
+
+## 🙏 Acknowledgements
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Zustand](https://github.com/pmndrs/zustand)

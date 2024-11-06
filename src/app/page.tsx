@@ -9,7 +9,7 @@ import { useTaskStore } from '../store/taskStore';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<TaskStatus>('OPEN');
-  const { initialize, loading } = useTaskStore();
+  const { initialize, loading, tasks } = useTaskStore();
 
   useEffect(() => {
     // Initialize all task lists once when the app starts
@@ -17,9 +17,9 @@ export default function Home() {
   }, [initialize]);
 
   const tabs: { label: string; value: TaskStatus }[] = [
-    { label: 'Open', value: 'OPEN' },
-    { label: 'In Progress', value: 'IN_PROGRESS' },
-    { label: 'Closed', value: 'CLOSED' },
+    { label: `Open (${tasks['OPEN'].length})`, value: 'OPEN' },
+    { label: `In Progress (${tasks['IN_PROGRESS'].length})`, value: 'IN_PROGRESS' },
+    { label: `Closed (${tasks['CLOSED'].length})`, value: 'CLOSED' },
   ];
 
   return (

@@ -2,9 +2,10 @@
 "use client";
 
 import { useEffect, useCallback, useState } from 'react';
-import { Task, TaskStatus, SortingOrder } from '../types/types';
+import { TaskStatus, SortingOrder } from '../types/types';
 import { useTaskStore } from '../store/taskStore';
 import { format } from 'date-fns';
+import { ApiService } from '../services/api';
 
 interface TaskTableProps {
     status: TaskStatus;
@@ -23,10 +24,22 @@ export default function TaskTable({ status }: TaskTableProps) {
     const [searchTerm, setSearchTerm] = useState('');
     const currentTasks = tasks[status] || [];
 
-    const filteredTasks = currentTasks.filter(task =>
-        task.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        task.labels.some(label => label.toLowerCase().includes(searchTerm.toLowerCase()))
-    );
+    const [filters, setFilters] = useState({
+        priority: '',
+        assignee: '',
+        dueDate: ''
+    });
+
+    const filteredTasks = currentTasks
+        .filter(task =>
+            (!filters.priority || task.priority === filters.priority) &&
+            (!filters.assignee || task.assignee === filters.assignee) &&
+            (!filters.dueDate || task.due_date === filters.dueDate)
+        )
+        .filter(task =>
+            task.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            task.labels.some(label => label.toLowerCase().includes(searchTerm.toLowerCase()))
+        );
 
     const sortedTasks = [...filteredTasks].sort((a, b) => {
         const dateA = new Date(a.created_at).getTime();
@@ -65,6 +78,40 @@ export default function TaskTable({ status }: TaskTableProps) {
         await updateTaskStatus(taskId, newStatus);
     };
 
+    const [hasMore, setHasMore] = useState(true);
+    const [page, setPage] = useState(0);
+
+    const loadMore = useCallback(async () => {
+        if (!hasMore) return;
+        const response = await ApiService.fetchTasks({
+            task_status: status,
+            page_details: {
+                page_size: 20,
+                offset: page * 20
+            }
+        });
+
+        setHasMore(response.page_details.has_next);
+        setPage(prev => prev + 1);
+    }, [hasMore, page, status]);
+
+    // Add intersection observer for infinite scroll
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            entries => {
+                if (entries[0].isIntersecting && hasMore) {
+                    loadMore();
+                }
+            },
+            { threshold: 0.5 }
+        );
+
+        const sentinel = document.querySelector('#sentinel');
+        if (sentinel) observer.observe(sentinel);
+
+        return () => observer.disconnect();
+    }, [loadMore, hasMore]);
+
     return (
         <div className="space-y-4">
             {currentTasks.length === 0 ? (
@@ -87,12 +134,28 @@ export default function TaskTable({ status }: TaskTableProps) {
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </div>
+                        <div className="flex ">
                         <button
                             onClick={() => setSortOrder(prev => prev === 'ASC' ? 'DESC' : 'ASC')}
-                            className="ml-4 px-4 py-2 border text-gray-800 rounded-lg hover:bg-gray-50"
+                            className="ml-4 px-4 py-2= border text-gray-800 rounded-lg hover:bg-gray-50"
                         >
                             Sort by Date {sortOrder === 'ASC' ? '↑' : '↓'}
                         </button>
+                        <div className="flex gap-4">
+                            <select
+                                value={filters.priority}
+                                onChange={e => setFilters(prev => ({ ...prev, priority: e.target.value }))}
+                                className="ml-4 px-2 py-2.5 border text-gray-800 rounded-lg hover:bg-gray-50"
+                            >
+                                <option value="">All Priorities</option>
+                                <option value="Urgent">Urgent</option>
+                                <option value="High">High</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Low">Low</option>
+                            </select>
+                            {/* Add similar filters for assignee and due date */}
+                        </div>
+                        </div>
                     </div>
 
                     <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
@@ -178,5 +241,6 @@ export default function TaskTable({ status }: TaskTableProps) {
                 </>
             )}
         </div>
+
     );
 }
