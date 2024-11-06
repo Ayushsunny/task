@@ -6,7 +6,8 @@ import {
   TasksResponse, 
   CommentsRequest, 
   CommentsResponse,
-  MOCK_TASKS 
+  MOCK_TASKS,
+  Comment 
 } from '../types/types';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -83,7 +84,7 @@ export class ApiService {
   
     static async createComment(taskId: number, content: string): Promise<Comment> {
       await delay(300);
-      
+  
       return {
         id: Math.floor(Math.random() * 1000),
         content,
