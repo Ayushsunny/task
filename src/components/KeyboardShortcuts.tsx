@@ -56,7 +56,7 @@ export default function KeyboardShortcuts() {
         <div className="flex min-h-screen items-center justify-center">
           <div className="fixed inset-0 bg-black/30" />
 
-          <div className="relative bg-white text-gray-900 rounded-lg w-full max-w-md mx-4 p-6">
+          <div className="relative bg-white text-gray-800 rounded-lg w-full max-w-md mx-4 p-6">
             <Dialog.Title className="text-lg font-medium mb-4">
               Keyboard Shortcuts
             </Dialog.Title>
